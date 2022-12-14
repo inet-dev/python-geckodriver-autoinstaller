@@ -46,7 +46,7 @@ def get_platform_architecture():
         architecture = 'os'
     elif sys.platform.startswith('win'):
         platform = 'win'
-        architecture = '32'
+        architecture = '64'
     else:
         raise RuntimeError('Could not determine geckodriver download URL for this platform.')
     return platform, architecture
@@ -65,9 +65,12 @@ def get_geckodriver_url(version):
         compression = 'zip'
     else:
         compression = 'tar.gz'
-
-    return f'https://github.com/mozilla/geckodriver/releases/download/{version}' \
-           f'/geckodriver-{version}-{platform}{architecture}.{compression}'
+    if platform == 'win': 
+        url = f'https://github.com/mozilla/geckodriver/releases/download/{version}/geckodriver-{version}-{platform}{architecture}.zip'
+        return url
+    else:
+        return f'https://github.com/mozilla/geckodriver/releases/download/{version}' \
+               f'/geckodriver-{version}-{platform}{architecture}.{compression}'
 
 
 def find_binary_in_path(filename):
